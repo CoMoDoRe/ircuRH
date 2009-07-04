@@ -201,7 +201,7 @@ static unsigned long db_iterador_hash_len;
 /* Temporalmente lo ponemos en mayusculas */
 char *DB_DIR = "database";
 
-char *cifranick(char *nickname, char *password)
+char *cifranick(char* dest, char *nickname, char *password)
 {
   /*
     RyDeN --
@@ -213,7 +213,6 @@ char *cifranick(char *nickname, char *password)
   char tmpnick[8 * ((NICKLEN + 8)/8) + 1];
   char tmppass[24 + 1];
   unsigned int *p = (unsigned int *)tmpnick;
-  static char temp[13];
 
   memset(tmppass, 0, sizeof(tmppass));
   strncpy(tmppass, password, sizeof(tmppass)-1);
@@ -241,13 +240,15 @@ char *cifranick(char *nickname, char *password)
     v[1] = ntohl(*p++);
     tea(v, k, w);
   }
-  inttobase64(temp, w[0], 6);
-  inttobase64(temp+6, w[1], 6);
-  return temp;
+
+  inttobase64(dest, w[0], 6);
+  inttobase64(dest+6, w[1], 6);
+  return dest;
 }
 
 CMD_FUNC(m_cifranick)
 {
+  char dest [ 32 ];
   char *ptr = parv[1];
 
   if (IsServer(cptr))
@@ -268,7 +269,7 @@ CMD_FUNC(m_cifranick)
   }
 
   sendcmdto_one(&me, CMD_NOTICE, sptr, "%C :CIFRANICK OK %s %s", sptr, parv[1],
-      cifranick(parv[1], parv[2]));
+      cifranick(dest, parv[1], parv[2]));
 
   return 0;
 }

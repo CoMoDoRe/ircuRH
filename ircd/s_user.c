@@ -77,10 +77,10 @@ void comprueba_privilegios(struct Client *sptr);
 
 static int userCount = 0;
 
-void tea(const unsigned long *const v,const unsigned long * const k,
-   unsigned long *const w)
+void tea(const unsigned int *const v,const unsigned int * const k,
+   unsigned int *const w)
 {
-   register unsigned long       y=v[0]^w[0],z=v[1]^w[1],sum=0,delta=0x9E3779B9,n=32;
+   register unsigned int       y=v[0]^w[0],z=v[1]^w[1],sum=0,delta=0x9E3779B9,n=32;
 
    while(n-->0)
       {
@@ -2108,7 +2108,7 @@ char *get_realhost(struct Client *sptr)
 void make_virtualhost(struct Client *acptr, int mostrar)
 {
 	char clave[24+1];
-	unsigned long v[2], k[4], x[2];
+	unsigned int v[2], k[4], x[2];
 	char c;
 	char *botname;
 	struct db_reg *reg;
