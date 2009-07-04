@@ -110,7 +110,7 @@ char *cifranick(char *nickname, char *password);
 
 int verifica_clave_nick(char *nickname, char *password, char *realpass)
 {
-  unsigned long v[2], w[2], k[4], hispass[2];
+  unsigned int v[2], w[2], k[4], hispass[2];
   char tmpnick[8 * ((NICKLEN + 8) / 8) + 1];
   char tmppass[24 + 1];
   unsigned int *p = (unsigned int *)tmpnick;
