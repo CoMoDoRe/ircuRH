@@ -12,17 +12,17 @@
 # To install in $HOME instead of /usr/local, use:
 #    make install prefix=$HOME
 
-CC=gcc
+CC=cc
 
-CFLAGS=-O3 -DHAVE_UNISTD_H -DUSE_MMAP
+CFLAGS=-O
 #CFLAGS=-O -DMAX_WBITS=14 -DMAX_MEM_LEVEL=7
 #CFLAGS=-g -DDEBUG
 #CFLAGS=-O3 -Wall -Wwrite-strings -Wpointer-arith -Wconversion \
 #           -Wstrict-prototypes -Wmissing-prototypes
 
 LDFLAGS=-L. -lz
-LDSHARED=gcc
-CPP=gcc -E
+LDSHARED=$(CC)
+CPP=$(CC) -E
 
 VER=1.1.4
 LIBS=libz.a
@@ -33,10 +33,10 @@ RANLIB=ranlib
 TAR=tar
 SHELL=/bin/sh
 
-prefix =/usr/local
-exec_prefix =${prefix}
-libdir =${exec_prefix}/lib
-includedir =${prefix}/include
+prefix = /usr/local
+exec_prefix = ${prefix}
+libdir = ${exec_prefix}/lib
+includedir = ${prefix}/include
 
 OBJS = adler32.o compress.o crc32.o gzio.o uncompr.o deflate.o trees.o \
        zutil.o inflate.o infblock.o inftrees.o infcodes.o infutil.o inffast.o

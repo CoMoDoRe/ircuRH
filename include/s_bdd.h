@@ -77,8 +77,8 @@ struct db2_reg {
 	struct db2_reg *next;
 };
 
-extern unsigned long tabla_registros[BDD_TOTAL][2];
-extern unsigned long tabla_hash[BDD_TOTAL][2];
+extern unsigned int tabla_registros[BDD_TOTAL][2];
+extern unsigned int tabla_hash[BDD_TOTAL][2];
 
 struct db_file__ {
 	char *map_p;

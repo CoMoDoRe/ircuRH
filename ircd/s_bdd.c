@@ -125,9 +125,9 @@ tablas_activas_t tablas_activas[BDD_TOTAL];
 tablas_activas2_t tablas_activas2[BDD_TOTAL];
 
 /* Vectores */
-unsigned long tabla_registros[BDD_TOTAL][2];
-unsigned long tabla_residente[BDD_TOTAL];
-unsigned long tabla_hash[BDD_TOTAL][2];
+unsigned int tabla_registros[BDD_TOTAL][2];
+unsigned int tabla_residente[BDD_TOTAL];
+unsigned int tabla_hash[BDD_TOTAL][2];
 struct db_reg **primer_db[BDD_TOTAL];
 struct db2_reg **primer_db2[BDD_TOTAL];
 short tabla_corrupta[BDD_TOTAL];
@@ -139,9 +139,9 @@ unsigned int db_hash_registro(char *clave, int len);
 
 /* Uso interno */
 static inline void inicia_actividad(void);
-static inline void abrir_db(db_file *fichero, char db, unsigned long registro);
+static inline void abrir_db(db_file *fichero, char db, unsigned int registro);
 static inline int leer_db(db_file *fichero, char *buf, size_t max_length);
-static inline void seek_db(db_file *fichero, unsigned long registro);
+static inline void seek_db(db_file *fichero, unsigned int registro);
 static inline void cerrar_db(db_file *fichero);
 static inline void inicia_db(char db, int tabla_version);
 static inline void db_actualiza_hash(char *registro, char db);
@@ -159,7 +159,7 @@ inline int tabla_es_corrupta(char db);
 static inline void db_tabla_comprueba_corrupcion(char db, int tabla_version);
 static inline void db_almacena_hash(char db);
 static inline void db_get_hash_str(char db, char *dest1, char *dest2);
-static inline void db_get_hash(char db, unsigned long *dest1, unsigned long *dest2, int tabla_version);
+static inline void db_get_hash(char db, unsigned int *dest1, unsigned int *dest2, int tabla_version);
 
 /* Segmentado de líneas de registro */
 static inline void db_segmenta_registro(char *registro, char **serie, char **destino, char **clave,
@@ -195,8 +195,8 @@ static struct db2_reg *db2_iterador_first(void);
 static char db_iterador_tabla;
 static struct db_reg *db_iterador_registro;
 static struct db2_reg *db2_iterador_registro;
-static unsigned long db_iterador_hash;
-static unsigned long db_iterador_hash_len;
+static unsigned int db_iterador_hash;
+static unsigned int db_iterador_hash_len;
 
 /* Temporalmente lo ponemos en mayusculas */
 char *DB_DIR = "database";
@@ -694,7 +694,7 @@ static inline void db_tabla_join(struct Client* cptr, struct Client* sptr, int p
   char buf[1025];
   char hashtabla[13];
   int len;
-  unsigned long grifo = 1;
+  unsigned int grifo = 1;
   unsigned int bdd_version = cli_serv(cptr)->bdd_version;
   int tipo_tabla;
   char *serie, *destino, *clave, *clave_fin, *valor, *valor_fin, *valor_clave, *valor_clave_fin;
@@ -1167,7 +1167,7 @@ void db_die(char *formatmsg, ...)
  * abrir_db
  *
  */
-static inline void abrir_db(db_file *fichero, char db, unsigned long registro)
+static inline void abrir_db(db_file *fichero, char db, unsigned int registro)
 {
   char db_path[100];
   int handle;
@@ -1212,10 +1212,10 @@ static inline void cerrar_db(db_file *fichero)
  * seek_db
  *
  */
-static inline void seek_db(db_file *fichero, unsigned long registro)
+static inline void seek_db(db_file *fichero, unsigned int registro)
 {
   char *ptrhi, *ptrlo, *p1, *p2;
-  unsigned long serie;
+  unsigned int serie;
 
   /* Seek por bidivisión, extraído del ircuH, escrito por jcea (http://www.argo.es/~jcea/)
   http://devel.irc-hispano.org
@@ -1708,7 +1708,7 @@ static inline void db_inserta_registro(struct Client *cptr, char db, char *regis
     char *valor, char *valor_fin, int addr)
 {
   struct db_reg *add;
-  unsigned long seriel;
+  unsigned int seriel;
   char c;
   int i;
 
@@ -1821,7 +1821,7 @@ static inline void db_inserta_registro2(struct Client *cptr, char db, char *regi
     char *valor, char *valor_fin, int addr)
 {
   struct db2_reg *add;
-  unsigned long seriel;
+  unsigned int seriel;
   char c;
   int i, direction;
 
@@ -2215,7 +2215,7 @@ static inline void inicia_db(char db, int tabla_version)
 static inline void db_actualiza_hash(char *registro, char db)
 {
   char tmpbuf[700];
-  unsigned long k[4], x[2], v[2];
+  unsigned int k[4], x[2], v[2];
   char *p;
 
   memset(tmpbuf, 0, 500);
@@ -2232,7 +2232,7 @@ static inline void db_actualiza_hash(char *registro, char db)
 
   p = tmpbuf;
 
-  memset(k, 0, sizeof(unsigned long)*4);
+  memset(k, 0, sizeof(unsigned int)*4);
   x[0] = tabla_hash[db][0];
   x[1] = tabla_hash[db][1];
   while (*p)
@@ -2318,7 +2318,7 @@ static inline void db_get_hash_str(char db, char *dest1, char *dest2)
   inttobase64(dest2, tabla_hash[db][1], 6);
 }
 
-static inline void db_get_hash(char db, unsigned long *dest1, unsigned long *dest2, int tabla_version)
+static inline void db_get_hash(char db, unsigned int *dest1, unsigned int *dest2, int tabla_version)
 {
   int handle;
   char path[1024];
@@ -2360,7 +2360,7 @@ static inline void db_get_hash(char db, unsigned long *dest1, unsigned long *des
 
 static inline void db_tabla_comprueba_corrupcion(char db, int tabla_version)
 {
-  unsigned long hash1, hash2;
+  unsigned int hash1, hash2;
   db_get_hash(db, &hash1, &hash2, tabla_version);
 
   if (tabla_hash[db][0] != hash1 || tabla_hash[db][1] != hash2)
