@@ -2194,8 +2194,7 @@ void make_virtualhost(struct Client *acptr, int mostrar)
 			cli_user(acptr)->virtualhost[6] = '.';
 			inttobase64(cli_user(acptr)->virtualhost+7, x[1], 6);
 			cli_user(acptr)->virtualhost[13] = '.';
-			strcpy(cli_user(acptr)->virtualhost+13,
-				(utiliza_ipv6(acptr) ? ".vIPv6" : ".vIPv4"));
+			strcpy(cli_user(acptr)->virtualhost+13, ".virtual");
 
 			/* No debería ocurrir nunca... */
 			if (++ts == 65535) {
