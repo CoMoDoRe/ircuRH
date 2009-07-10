@@ -2149,7 +2149,8 @@ void make_virtualhost(struct Client *acptr, int mostrar)
                 /* El usuario tiene dirección virtual semifija */
                 SetIpPersonalizada(acptr);
                 strncpy(cli_user(acptr)->virtualhost, reg->valor, HOSTLEN);
-                strncat(cli_user(acptr)->virtualhost, (utiliza_ipv6(acptr) ? ".pIPv6" : ".pIPv4"), HOSTLEN);
+                // MUY FEO: strncat(cli_user(acptr)->virtualhost, (utiliza_ipv6(acptr) ? ".pIPv6" : ".pIPv4"), HOSTLEN);
+                strncat(cli_user(acptr)->virtualhost, ".virtual", HOSTLEN);
         }
         else
         {
