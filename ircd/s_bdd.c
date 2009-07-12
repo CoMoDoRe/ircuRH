@@ -2697,6 +2697,7 @@ static int tabla_activa_users(char *clave, char *valor)
     if (nick_suspendido)
     {
         cli_rhflags(acptr) |= RHFLAGS_SUSPENDED;
+        cli_rhflags(acptr) &= ~RHFLAGS_IDENTIFIED;
     }
     else if (nick_forbid) /* El nick está prohibido hacemos rename */
     {
