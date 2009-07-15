@@ -2184,7 +2184,7 @@ void make_virtualhost(struct Client *acptr, int mostrar)
                 do {
 			x[0] = x[1] = 0;
 			v[0] = (k[0] & 0xffff0000) + ts;
-			v[1] = ntohl((unsigned long)acptr->cli_ip.s_addr);
+			v[1] = ntohl((unsigned int)acptr->cli_ip.s_addr);
 
 			tea(v, k, x);
 
