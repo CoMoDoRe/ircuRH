@@ -693,14 +693,29 @@ int client_can_send_to_channel(struct Client *cptr, struct Channel *chptr)
  * if a member and not opped or voiced and banned
  * return the name of the first channel banned on
  */
-const char* find_no_nickchange_channel(struct Client* cptr)
+const char* find_no_nickchange_channel(struct Client* cptr, int* reason)
 {
+  *reason = 0;
+  if ( IsChannelService ( cptr ) )
+    return 0;
+
   if (MyUser(cptr)) {
     struct Membership* member;
     for (member = (cli_user(cptr))->channel; member;
 	 member = member->next_channel) {
-      if (!IsVoicedOrOpped(member) && is_banned(cptr, member->channel, member))
-        return member->channel->chname;
+      if (!IsVoicedOrOpped(member))
+      {
+        if ( is_banned(cptr, member->channel, member) )
+        {
+          *reason = 1;
+          return member->channel->chname;
+        }
+        else if ( member->channel->rhmode.mode & RHMODE_NONICKCHANGE )
+        {
+          *reason = 2;
+          return member->channel->chname;
+        }
+      }
     }
   }
   return 0;
@@ -775,6 +790,8 @@ void channel_modes(struct Client *cptr, char *mbuf, char *pbuf, int buflen,
 	  *mbuf++ = 'M';
   if (chptr->rhmode.mode & RHMODE_NOCTCP)
 	  *mbuf++ = 'G';
+  if (chptr->rhmode.mode & RHMODE_NONICKCHANGE)
+      *mbuf++ = 'N';
   *mbuf = '\0';
 }
 
@@ -1477,6 +1494,7 @@ modebuf_flush_int(struct ModeBuf *mbuf, int all)
 	  RHMODE_SUSPEND,	'S',
 	  RHMODE_REGMOD,	'M',
 	  RHMODE_NOCTCP,	'G',
+      RHMODE_NONICKCHANGE, 'N',
 	  0x0, 0x0
   };
 
@@ -1915,7 +1933,7 @@ modebuf_rhmode(struct ModeBuf *mbuf, unsigned int mode)
 
   mode &= (MODE_ADD | MODE_DEL | RHMODE_BADWORDS | RHMODE_NOCOLOR | RHMODE_RGSTRONLY |
 	   RHMODE_AUTOOP | RHMODE_SUSPEND | RHMODE_REGMOD | RHMODE_ONLYIRCOP |
-       RHMODE_CHARLAS | RHMODE_NOCTCP);
+       RHMODE_CHARLAS | RHMODE_NOCTCP | RHMODE_NONICKCHANGE);
 
   if (!(mode & ~(MODE_ADD | MODE_DEL))) /* don't add empty modes... */
     return;
@@ -2039,6 +2057,7 @@ modebuf_extract(struct ModeBuf *mbuf, char *buf)
 	  RHMODE_SUSPEND,	'S',
 	  RHMODE_REGMOD,	'M',
 	  RHMODE_NOCTCP,	'G',
+      RHMODE_NONICKCHANGE, 'N',
 	  0x0, 0x0
   };
   unsigned int add;
@@ -2751,6 +2770,7 @@ mode_parse(struct ModeBuf *mbuf, struct Client *cptr, struct Client *sptr,
 	  RHMODE_SUSPEND,	'S',
 	  RHMODE_REGMOD,	'M',
 	  RHMODE_NOCTCP,	'G',
+      RHMODE_NONICKCHANGE, 'N',
 	  MODE_ADD,			'+',
 	  MODE_DEL,			'-',
 	  0x0, 0x0

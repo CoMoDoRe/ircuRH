@@ -373,7 +373,7 @@ extern const struct Numeric* get_error_numeric(int err);
 /*      ERR_NOLOGIN          444           removed from RFC1459 */
 /*      ERR_SUMMONDISABLED   445           removed from RFC1459 */
 /*      ERR_USERSDISABLED    446           removed from RFC1459 */
-/*	ERR_NONICKCHANGE     447	 unreal */
+#define ERR_NONICKCHANGE     447
 
 #define ERR_NOTREGISTERED    451
 /*      ERR_IDCOLLISION      452           IRCnet extension ? */

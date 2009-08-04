@@ -88,6 +88,7 @@ struct Client;
 #define RHMODE_REGMOD		0x1000
 #define RHMODE_SUSPEND		0x2000
 #define RHMODE_NOCTCP		0x4000
+#define RHMODE_NONICKCHANGE 0x8000
 
 #define MODE_CHANOP     CHFL_CHANOP
 #define MODE_VOICE      CHFL_VOICE
@@ -343,7 +344,7 @@ extern struct Client* find_chasing(struct Client* sptr, const char* user, int* c
 void add_invite(struct Client *cptr, struct Channel *chptr);
 int number_of_zombies(struct Channel *chptr);
 
-extern const char* find_no_nickchange_channel(struct Client* cptr);
+extern const char* find_no_nickchange_channel(struct Client* cptr, int* reason);
 extern struct Membership* IsMember(struct Client *cptr, struct Channel *chptr);
 extern struct Membership* find_channel_member(struct Client* cptr, struct Channel* chptr);
 extern int member_can_send_to_channel(struct Membership* member);

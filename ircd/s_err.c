@@ -926,7 +926,7 @@ static Numeric replyTable[] = {
 /* 446 */
   { 0 },
 /* 447 */
-  { 0 },
+  { ERR_NONICKCHANGE, "%s :No puedes cambiarte de nick mientras estés en %s (+N)", "447" },
 /* 448 */
   { 0 },
 /* 449 */
